@@ -120,3 +120,30 @@ export const roomMessages = pgTable(
   },
   (t) => [uniqueIndex('room_messages_seq_idx').on(t.roomIdHash, t.seq)],
 )
+
+/**
+ * Короткий код для передачи комнаты голосом.
+ *
+ * Шесть слов набрать точно, но продиктовать — мучение. Код живёт минуту и
+ * обменивается на настоящий идентификатор, поэтому шести цифр достаточно:
+ * перебирать нечего, пока он не истёк.
+ *
+ * Идентификатор комнаты хранится здесь зашифрованным на самом коде — сервер
+ * знает только его хеш и потому не может выдать комнату тому, кто кода не
+ * знает. Перебор ограничен по адресу в routes/rooms.ts: без этого шести цифр
+ * не хватило бы даже на минуту.
+ */
+export const inviteCodes = pgTable(
+  'invite_codes',
+  {
+    // SHA-256 от кода: по базе его не подобрать быстрее, чем через API,
+    // а там счётчик попыток.
+    codeHash: text('code_hash').primaryKey(),
+    // Идентификатор комнаты под AES-GCM, ключ выведен из самого кода.
+    payload: text('payload').notNull(),
+    nonce: text('nonce').notNull(),
+    expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+    createdAt: createdAt(),
+  },
+  (t) => [index('invite_codes_expires_idx').on(t.expiresAt)],
+)

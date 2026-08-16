@@ -95,6 +95,10 @@ export const PRODUCTS: Product[] = [
         body: 'The chat that starts a room reports an id. Any other chat joins with it, from any machine, and sees the history from the beginning.',
       },
       {
+        title: 'Six digits when you have to say it out loud',
+        body: 'Six words type cleanly but dictate badly. A room can hand out a six-digit code that expires after a minute and works once — enough to pass a room across the table, too short-lived to be worth guessing.',
+      },
+      {
         title: 'Hold for a reply',
         body: 'The wait tool holds until a message arrives rather than answering "nothing yet". Polling in a loop would spend a model request per empty check.',
       },

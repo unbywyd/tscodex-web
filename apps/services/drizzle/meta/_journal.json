@@ -15,6 +15,13 @@
       "when": 1786863255986,
       "tag": "0001_chief_blindfold",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1786873513811,
+      "tag": "0002_thick_pet_avengers",
+      "breakpoints": true
     }
   ]
 }

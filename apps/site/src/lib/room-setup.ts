@@ -58,6 +58,11 @@ leave_room, delete_room.
 To start a conversation, one chat runs create_room and reports the id. The other
 chat runs join_room with that id, from any machine. Joining replays the history.
 
+Six words are easy to type and hard to dictate. share_code turns the room into
+six digits that expire after a minute and work once — say them out loud, and the
+other machine runs join_with_code. Short digits are only safe because the code
+is short-lived, single-use and rate-limited: it is an invitation, not a key.
+
 Use wait when expecting a reply — it holds for about a minute. Use read for a
 quick check. Do not poll read in a loop: each call is a model request.
 
