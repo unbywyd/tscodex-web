@@ -1,0 +1,22 @@
+{
+  "name": "tscodex",
+  "version": "0.0.0",
+  "private": true,
+  "description": "tscodex monorepo — landing (tscodex.com) and services (services.tscodex.com)",
+  "packageManager": "pnpm@10.28.2",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "start": "turbo run start",
+    "typecheck": "turbo run typecheck",
+    "lint": "turbo run lint",
+    "clean": "turbo run clean"
+  },
+  "devDependencies": {
+    "turbo": "^2.10.8",
+    "typescript": "^5.9.3"
+  }
+}

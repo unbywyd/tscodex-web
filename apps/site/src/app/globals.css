@@ -1,0 +1,69 @@
+@import "tailwindcss";
+
+/* ============================================================
+ * tscodex — design tokens
+ * ============================================================
+ * Same discipline as webto.pro: dark, monospace for labels, no
+ * glow. Different accent so the two sites read as related but
+ * not identical — webto.pro is lime, this is cyan.
+ * ============================================================ */
+
+@theme {
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, monospace;
+
+  --color-bg: oklch(0.155 0.008 240);
+  --color-surface-1: oklch(0.195 0.008 240);
+  --color-surface-2: oklch(0.23 0.008 240);
+
+  --color-fg: oklch(0.97 0 0);
+  --color-fg-muted: oklch(0.76 0 0);
+  --color-fg-dim: oklch(0.58 0 0);
+
+  --color-border: oklch(1 0 0 / 0.1);
+  --color-border-strong: oklch(1 0 0 / 0.2);
+
+  --color-accent: oklch(0.82 0.14 195);
+  --color-accent-soft: oklch(0.82 0.14 195 / 0.12);
+  --color-accent-fg: oklch(0.16 0 0);
+
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* Якорные ссылки иначе прячут заголовок под липкой шапкой. */
+  scroll-padding-top: 5rem;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-fg);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: var(--color-accent-fg);
+}
+
+/* Клавиатурная навигация должна быть видна — по умолчанию Tailwind её гасит. */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
