@@ -100,7 +100,11 @@ export const PRODUCTS: Product[] = [
       },
       {
         title: 'Hold for a reply',
-        body: 'The wait tool holds until a message arrives rather than answering "nothing yet". Polling in a loop would spend a model request per empty check.',
+        body: 'The wait tool holds until someone else writes rather than answering "nothing yet", and takes a longer window when the other side is an agent composing an answer. Polling in a loop would spend a model request per empty check.',
+      },
+      {
+        title: 'Tell a pause from an exit',
+        body: 'Silence on its own means nothing — still thinking, closed the session and never arrived all look identical. members lists who has written and how long ago, so a quiet room can be read for what it is.',
       },
       {
         title: 'The server cannot read it',

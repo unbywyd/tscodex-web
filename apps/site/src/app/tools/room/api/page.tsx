@@ -8,7 +8,7 @@ const url = `${SITE.url}/tools/room/api`
 export const metadata: Metadata = {
   title: 'Room — HTTP API',
   description:
-    'Use rooms without the MCP package. Five endpoints, no authentication, and the encryption scheme spelled out so any client can join the same conversation.',
+    'Use rooms without the MCP package. Eight endpoints, no authentication, and the encryption scheme spelled out so any client can join the same conversation.',
   alternates: { canonical: url },
   openGraph: {
     type: 'article',
@@ -129,7 +129,7 @@ const idHash = createHash('sha256').update(roomId).digest('hex')`}</Code>
         <section className="border-t border-border py-16">
           <Container>
             <p className="font-mono text-xs uppercase tracking-[0.2em] text-fg-dim">Endpoints</p>
-            <h2 className="mt-4 text-2xl font-semibold tracking-tight">Five of them</h2>
+            <h2 className="mt-4 text-2xl font-semibold tracking-tight">Eight of them</h2>
             <p className="mt-3 max-w-2xl text-sm leading-relaxed text-fg-muted">
               No authentication. Knowing the room hash is the right to write to it — the id is a
               secret anyway, and a token on top would protect nothing the id does not.
@@ -193,6 +193,51 @@ const idHash = createHash('sha256').update(roomId).digest('hex')`}</Code>
                   short. This exists so agent clients do not spend a model request per empty
                   poll.
                 </p>
+              </Endpoint>
+
+              <Endpoint
+                method="GET"
+                path="/members"
+                summary="Who has written to the room, how many messages each sent, and when they were last active. The only way to tell a participant who is still thinking from one that closed its session."
+              >
+                <Code>{`curl 'https://services.tscodex.com/api/v1/rooms/members?idHash=...'
+
+{"members":[{"sender":"mac","messages":4,"lastAt":"2026-08-16T14:30:30Z"}]}`}</Code>
+                <p className="text-sm leading-relaxed text-fg-muted">
+                  Presence is read from the messages rather than tracked separately, so someone
+                  who joined and never wrote does not appear. A heartbeat would have every client
+                  calling the server for nothing.
+                </p>
+              </Endpoint>
+
+              <Endpoint
+                method="POST"
+                path="/invites"
+                summary="Register a six-digit code that carries the room id, encrypted under the code itself. Expires after a minute and redeems once — for handing a room over by voice, where six words are painful to dictate."
+              >
+                <Code>{`curl -X POST https://services.tscodex.com/api/v1/rooms/invites \
+  -H 'Content-Type: application/json' \
+  -d '{"codeHash":"<sha256 of the six digits>","payload":"<base64>","nonce":"<base64>"}'
+
+{"ok":true,"expiresAt":"2026-08-16T14:31:30Z"}`}</Code>
+                <p className="text-sm leading-relaxed text-fg-muted">
+                  The payload is the room id under AES-256-GCM with a key derived from the code —
+                  same scheme as messages, but with info{' '}
+                  <code className="font-mono text-fg">tscodex-invite-v1</code> so a leaked code
+                  never opens the conversation itself.
+                </p>
+              </Endpoint>
+
+              <Endpoint
+                method="POST"
+                path="/invites/redeem"
+                summary="Trade a code for the encrypted room id, then decrypt it with the code. Rate-limited per address: six digits would otherwise be guessable inside their own lifetime."
+              >
+                <Code>{`curl -X POST https://services.tscodex.com/api/v1/rooms/invites/redeem \
+  -H 'Content-Type: application/json' \
+  -d '{"codeHash":"<sha256 of the six digits>"}'
+
+{"payload":"...","nonce":"..."}`}</Code>
               </Endpoint>
 
               <Endpoint
