@@ -183,20 +183,44 @@ roomsRoute.get('/wait', async (c) => {
   return c.json({ messages: [], timedOut: true })
 })
 
+// Кто в комнате и когда писал в последний раз.
+//
+// Без этого молчание неотличимо от обрыва: агент зовёт wait в пустоту, не зная,
+// думает собеседник или закрыл сессию.
+roomsRoute.get('/members', async (c) => {
+  const idHash = c.req.query('idHash') ?? ''
+  if (!hash.safeParse(idHash).success) return c.json({ error: 'Invalid request' }, 400)
+  if (!(await findRoom(idHash))) return c.json({ error: 'Room not found' }, 404)
+
+  // Считаем по сообщениям, а не по отдельному учёту присутствия: подключение
+  // без единого сообщения ничем себя не проявляет, а heartbeat заставил бы
+  // клиента ходить на сервер впустую.
+  const members = await db
+    .select({
+      sender: roomMessages.sender,
+      messages: raw<number>`count(*)::int`,
+      lastAt: raw<string>`max(${roomMessages.createdAt})`,
+    })
+    .from(roomMessages)
+    .where(eq(roomMessages.roomIdHash, idHash))
+    .groupBy(roomMessages.sender)
+
+  return c.json({ members })
+})
+
 // Удалить беседу вместе со всеми сообщениями.
 roomsRoute.delete('/', async (c) => {
   const body = await c.req.json().catch(() => null)
-  const parsed = z.object({ idHash: hash, ownerKeyHash: hash }).safeParse(body)
+  const parsed = z.object({ idHash: hash }).safeParse(body)
   if (!parsed.success) return c.json({ error: 'Invalid request' }, 400)
 
-  const room = await findRoom(parsed.data.idHash)
-  if (!room) return c.json({ error: 'Room not found' }, 404)
-  // Читать может каждый, у кого есть идентификатор; удалить — только тот, кто
-  // завёл беседу.
-  if (room.ownerKeyHash !== parsed.data.ownerKeyHash) {
-    return c.json({ error: 'Owner key required' }, 403)
-  }
+  if (!(await findRoom(parsed.data.idHash))) return c.json({ error: 'Room not found' }, 404)
 
+  // Удалить может любой участник, а не только создатель. Ключ владельца жил
+  // на одной машине и вместе с её сессией — комната, в которой договорились
+  // и разошлись, оставалась висеть до TTL, потому что стереть её было некому.
+  // Знание идентификатора здесь и так означает полный доступ к переписке.
+  //
   // Сообщения уходят каскадом — см. references в схеме.
   await db.delete(rooms).where(eq(rooms.idHash, parsed.data.idHash))
   return c.json({ ok: true })
