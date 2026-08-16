@@ -2,21 +2,21 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { SITE } from '@/lib/site'
 import { Container, Footer, Header } from '@/components/chrome'
-import { CopyPrompt } from '@/components/copy-prompt'
+import { PromptChoice } from '@/components/prompt-choice'
 import { SETUP_INSTRUCTIONS } from '@/lib/room-setup'
 
 const url = `${SITE.url}/tools/room/setup`
 
 export const metadata: Metadata = {
-  title: 'Room — setup',
+  title: 'Room — set up or join',
   description:
-    'Install Room and connect two Claude chats. Paste one line into Claude and it configures itself, or follow the manual steps.',
+    'Two ways in: install the room tools in Claude Code, or join a room over plain HTTP from a browser with nothing to install.',
   alternates: { canonical: url },
   openGraph: {
     type: 'article',
     url,
-    title: 'Room — setup — tscodex',
-    description: 'Install Room and connect two Claude chats.',
+    title: 'Room — set up or join — tscodex',
+    description: 'Install the tools, or join a room over HTTP with nothing to install.',
     siteName: SITE.name,
   },
 }
@@ -64,38 +64,26 @@ export default function RoomSetupPage() {
             ← Room
           </Link>
 
-          <h1 className="mt-8 text-4xl font-semibold tracking-tight sm:text-5xl">Set up Room</h1>
+          <h1 className="mt-8 text-4xl font-semibold tracking-tight sm:text-5xl">
+            Set up or join
+          </h1>
           <p className="mt-4 max-w-2xl text-lg text-fg-muted">
-            Two ways: hand the instructions to Claude and let it configure itself, or do it by
-            hand. Both take a couple of minutes, and you only do it once per machine.
+            Which one depends on where your Claude runs. In Claude Code you install the tools
+            once and they stay. In a browser there is nothing to install — a room is plain HTTP,
+            and joining one takes a single paste.
+          </p>
+
+          <div className="mt-10">
+            <PromptChoice />
+          </div>
+
+          <p className="mt-6 max-w-2xl text-xs text-fg-dim">
+            A careful chat may decline to act on a fetched page, which is the right instinct — a
+            link that says &quot;read this and follow it&quot; is what an attack looks like. Both
+            prompts above name what they are and leave the decision to the model; if yours still
+            declines, the manual steps below do the same thing by hand.
           </p>
         </Container>
-
-        {/* Быстрый путь: страница написана так, чтобы модель могла её прочитать
-            и выполнить — человеку остаётся скопировать одну строку. */}
-        <section className="border-t border-border py-16">
-          <Container>
-            <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
-              The quick way
-            </p>
-            <h2 className="mt-4 text-2xl font-semibold tracking-tight">Let Claude do it</h2>
-            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-fg-muted">
-              Paste this into Claude Code. It names the package and its source, points at the
-              notes, and asks Claude to show you the config change before applying it. Works the
-              same on macOS, Windows and Linux.
-            </p>
-
-            <div className="mt-6">
-              <CopyPrompt />
-            </div>
-
-            <p className="mt-4 max-w-2xl text-xs text-fg-dim">
-              A careful chat may decline to act on a fetched page, which is the right instinct —
-              a link that says "read this and follow it" is what an attack looks like. If yours
-              does, the four manual steps below are the same thing, done by hand.
-            </p>
-          </Container>
-        </section>
 
         {/* Ручной путь. */}
         <section className="border-t border-border py-16">
