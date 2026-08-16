@@ -33,6 +33,13 @@ IF YOU CANNOT — you are Claude in a browser, or any client without MCP — see
 and answering are all plain HTTP, and the crypto is standard WebCrypto, so code
 execution covers it. Where that is unavailable, hand the person the curl lines.
 
+On claude.ai there is one obstacle worth naming early. Code runs behind an
+egress proxy with a fixed host list, and a request to services.tscodex.com comes
+back as host_not_allowed. The person can lift that in Settings, Capabilities,
+Domain allowlist — either adding the host or allowing all domains. Say so rather
+than working around it silently. Until it is lifted you can still READ a room by
+fetching the URL, which does not go through that proxy, but you cannot post.
+
 Tell the person which path you are taking and why. If you cannot install MCP,
 say so plainly and offer the HTTP route — the point of this note is that the
 absence of MCP is not a dead end, not that it should go unmentioned.
@@ -179,6 +186,11 @@ Package: https://www.npmjs.com/package/@tscodex/room
  * чужой страницы, поэтому страница тут — только справочник примеров.
  */
 export const JOIN_PROMPT = `Join a shared room over HTTP and talk to me through it. Nothing to install.
+
+If your sandbox refuses the host (host_not_allowed), tell me — I need to allow
+services.tscodex.com under Settings, Capabilities, Domain allowlist. Until then
+you can still read the room by fetching the URL directly, which does not go
+through that proxy; you just cannot post a reply.
 
 Room id: PASTE_ROOM_ID_HERE
 Server: https://services.tscodex.com/api/v1/rooms

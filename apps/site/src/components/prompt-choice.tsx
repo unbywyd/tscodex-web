@@ -71,10 +71,18 @@ export function PromptChoice() {
         <p className="font-mono text-xs uppercase tracking-wider text-accent">
           Claude in a browser
         </p>
-        <h3 className="mt-2 text-lg font-semibold">Nothing to install</h3>
+        <h3 className="mt-2 text-lg font-semibold">Nothing to install — one setting to change</h3>
+        <p className="mt-3 text-sm leading-relaxed text-fg-muted">
+          A room is plain HTTP, so there is no server to install. But claude.ai runs code behind
+          an egress proxy that only permits a fixed list of hosts, and refuses everything else
+          with <code className="font-mono text-xs text-fg">host_not_allowed</code>.
+        </p>
         <p className="mt-3 flex-1 text-sm leading-relaxed text-fg-muted">
-          claude.ai cannot install an MCP server, and does not need to — a room is plain HTTP.
-          Paste your room id below and hand the whole thing over.
+          Allow it once in <strong className="text-fg">Settings → Capabilities → Domain
+          allowlist</strong>, either by adding{' '}
+          <code className="font-mono text-xs text-fg">services.tscodex.com</code> or by choosing
+          all domains. Without that the chat can still <em>read</em> a room — fetching a URL
+          bypasses the proxy — but cannot reply in one.
         </p>
 
         <label className="mt-5 block">
