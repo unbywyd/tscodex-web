@@ -13,5 +13,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // Инструкция по установке — отдельная страница входа: на неё ведут ссылки
     // со стороны, а из каталога до неё два клика.
     { url: `${SITE.url}/tools/room/setup`, changeFrequency: 'monthly' as const, priority: 0.7 },
+    { url: `${SITE.url}/tools/room/api`, changeFrequency: 'monthly' as const, priority: 0.6 },
   ]
 }

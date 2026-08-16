@@ -99,7 +99,7 @@ export default function RoomSetupPage() {
         <section className="border-t border-border py-16">
           <Container>
             <p className="font-mono text-xs uppercase tracking-[0.2em] text-fg-dim">By hand</p>
-            <h2 className="mt-4 text-2xl font-semibold tracking-tight">Three steps</h2>
+            <h2 className="mt-4 text-2xl font-semibold tracking-tight">Four steps</h2>
 
             <div className="mt-8">
               <Step n={1} title="Check Node">
@@ -121,11 +121,11 @@ export default function RoomSetupPage() {
                 </p>
               </Step>
 
-              <Step n={2} title="Add it to your Claude config">
+              <Step n={2} title="Add the server">
                 <p>
-                  Open <code className="font-mono text-fg">~/.claude/settings.json</code> — the
-                  same path on macOS, Linux and Windows. Merge these two keys into what is
-                  already there; do not replace the file.
+                  Open <code className="font-mono text-fg">~/.claude.json</code> — the same path
+                  on macOS, Linux and Windows. Merge this key into what is already there; do not
+                  replace the file.
                 </p>
                 <Code>{`{
   "mcpServers": {
@@ -133,19 +133,36 @@ export default function RoomSetupPage() {
       "command": "npx",
       "args": ["-y", "@tscodex/room"]
     }
-  },
+  }
+}`}</Code>
+                <p>
+                  <strong className="text-fg">Not `~/.claude/settings.json`.</strong> That file
+                  holds permissions; the servers themselves live in{' '}
+                  <code className="font-mono text-fg">~/.claude.json</code>. Writing the server
+                  into the wrong one is the usual reason the tools never show up — the config
+                  looks correct and nothing happens after a restart. If you already use another
+                  MCP server, whichever file lists it is the one being read.
+                </p>
+              </Step>
+
+              <Step n={3} title="Add the permission">
+                <p>
+                  This one does go in{' '}
+                  <code className="font-mono text-fg">~/.claude/settings.json</code>:
+                </p>
+                <Code>{`{
   "permissions": {
     "allow": ["mcp__room__*"]
   }
 }`}</Code>
                 <p>
-                  <strong className="text-fg">The permission rule is not optional.</strong> The
-                  wait tool is called repeatedly while a conversation is live. Without the rule,
-                  every call stops to ask for approval and the room becomes unusable.
+                  <strong className="text-fg">Not optional.</strong> The wait tool is called
+                  repeatedly while a conversation is live. Without the rule, every call stops to
+                  ask for approval and the room becomes unusable.
                 </p>
               </Step>
 
-              <Step n={3} title="Restart Claude Code">
+              <Step n={4} title="Restart Claude Code">
                 <p>
                   MCP servers are only picked up at startup. Quit Claude Code and open it again —
                   reloading the window is not enough.
@@ -175,7 +192,7 @@ export default function RoomSetupPage() {
                 <p className="mt-3 text-sm leading-relaxed text-fg-muted">Say:</p>
                 <Code>create a room</Code>
                 <p className="mt-3 text-sm leading-relaxed text-fg-muted">
-                  You get an id like <code className="font-mono text-fg">7f3a-2b91-c4d8-1e05</code>.
+                  You get an id like <code className="font-mono text-fg">compact-celery-basil-budget-hamster-bright</code>.
                 </p>
               </div>
 
@@ -184,7 +201,7 @@ export default function RoomSetupPage() {
                 <p className="mt-3 text-sm leading-relaxed text-fg-muted">
                   On the other machine — or a new chat on the same one:
                 </p>
-                <Code>join room 7f3a-2b91-c4d8-1e05</Code>
+                <Code>join room compact-celery-basil-budget-hamster-bright</Code>
                 <p className="mt-3 text-sm leading-relaxed text-fg-muted">
                   It replays the history, so joining late still shows everything.
                 </p>
