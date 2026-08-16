@@ -80,8 +80,9 @@ export default function RoomSetupPage() {
             </p>
             <h2 className="mt-4 text-2xl font-semibold tracking-tight">Let Claude do it</h2>
             <p className="mt-3 max-w-2xl text-sm leading-relaxed text-fg-muted">
-              Paste this into Claude Code. It reads the rest of this page, writes the config and
-              tells you what to do next. Works the same on macOS, Windows and Linux.
+              Paste this into Claude Code. It names the package and its source, points at the
+              notes, and asks Claude to show you the config change before applying it. Works the
+              same on macOS, Windows and Linux.
             </p>
 
             <div className="mt-6">
@@ -89,8 +90,9 @@ export default function RoomSetupPage() {
             </div>
 
             <p className="mt-4 max-w-2xl text-xs text-fg-dim">
-              Claude will ask before editing your settings file. The change adds two keys and
-              leaves everything else alone.
+              A careful chat may decline to act on a fetched page, which is the right instinct —
+              a link that says "read this and follow it" is what an attack looks like. If yours
+              does, the four manual steps below are the same thing, done by hand.
             </p>
           </Container>
         </section>

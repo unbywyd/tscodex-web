@@ -172,4 +172,4 @@ Package: https://www.npmjs.com/package/@tscodex/room
 
 /** Строка, которую человек вставляет в Claude, чтобы тот всё сделал сам. */
 export const SETUP_PROMPT =
-  'Read https://tscodex.com/room-setup.txt and set up Room on this machine following those instructions.'
+  'I want to add the Room MCP server (npm: @tscodex/room, source: github.com/unbywyd/mcp-room) so my chats can talk to each other. Setup notes are at https://tscodex.com/room-setup.txt — read them, tell me what the config change would be, and apply it if it looks right to you.'
